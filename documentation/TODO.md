@@ -3,6 +3,7 @@ CategoryService
 ProductService
 UserService/AdminService
 (UserService / Auth nur von Monolith trennen wenn sinnvoll)
+(UserManager nutzt aktuell roleManager um hardcoded nicht-admin user zu registrieren)
 
 (API Gateway (parallelization, calling other services and serving frontend, caching, sessions, basically all this minus new microservices))
 
