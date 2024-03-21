@@ -1,14 +1,17 @@
-## These Microservices should be implemented: 
+## These Microservices should be implemented:
+CategoryService
+ProductService
+UserService/AdminService
+(UserService / Auth nur von Monolith trennen wenn sinnvoll)
+
+(API Gateway (parallelization, calling other services and serving frontend, caching, sessions, basically all this minus new microservices))
+
+for reference:
 https://www.abhinavpandey.dev/blog/domain-driven-design
 https://stackoverflow.com/questions/71893113/how-to-identify-domain-in-ddd
 https://concisesoftware.com/blog/domain-driven-design-discovering-domains/
 
-Data Manager (if 1 database should be 1, otherwise 3):
-    Category Data Manager
-    Product Data Manager
-    User Data Manager
-Authentication Service
-API Gateway (parallelization, calling other services and serving frontend, caching, sessions)
 
-
-Contexts in theory: registration, order, delivery, bill (not applicable?)
+## Data access
+DAO (data access object are used currently, might be better to use microservice Manager instances) 
+e.g. "new ProductManagerImpl();"
