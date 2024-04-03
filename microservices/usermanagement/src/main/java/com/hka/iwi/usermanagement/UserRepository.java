@@ -1,6 +1,6 @@
 package com.hka.iwi.usermanagement;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.hka.iwi.usermanagement.User;
@@ -9,17 +9,16 @@ import com.hka.iwi.usermanagement.Role;
 // This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
 // CRUD refers Create, Read, Update, Delete
 
-// TODO: check if the interface is correct (see UserManager.java)
+// TODO: check if the repository suffices
 @Repository
-public interface UserRepository extends CrudRepository<Product, Integer> {
+public interface UserRepository extends JpaRepository<User, Integer> {
 
-    public void registerUser(String username, String name, String lastname, String password, Role role);
+}
 
-    public User getUserByUsername(String username);
+@Repository
+public interface RoleRepository extends JpaRepository<Role, Integer> {
 
-    public boolean deleteUserById(int id);
+    @Query("SELECT r FROM Role r WHERE r.level = :level")
+    Role findByLevel(@Param("level") int level);
 
-    public Role getRoleByLevel(int level);
-
-    public boolean doesUserAlreadyExist(String username);
 }
