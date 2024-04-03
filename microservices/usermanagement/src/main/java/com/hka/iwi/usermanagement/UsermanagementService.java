@@ -18,12 +18,7 @@ public class UsermanagementService {
     private UserRepository userRepository;
 
     @Transactional
-    public void registerUser(
-            String username,
-            String name,
-            String lastname,
-            String password,
-            Role role) {
+    public void registerUser(String username, String name, String lastname, String password, Role role) {
         User user = new User(username, name, lastname, password, role);
         userRepository.save(user);
     }

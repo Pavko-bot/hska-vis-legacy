@@ -20,14 +20,9 @@ public class ProductmanagementService {
         return productRepository.findAll();
     }
 
-    public List<Product> getProductsForSearchValues(
-            String searchDescription,
-            Double searchMinPrice,
+    public List<Product> getProductsForSearchValues(String searchDescription, Double searchMinPrice,
             Double searchMaxPrice) {
-        return productRepository.getProductsForSearchValues(
-                searchDescription,
-                searchMinPrice,
-                searchMaxPrice);
+        return productRepository.getProductsForSearchValues(searchDescription, searchMinPrice, searchMaxPrice);
     }
 
     public Product getProductById(int id) {
@@ -40,11 +35,7 @@ public class ProductmanagementService {
     }
 
     @Transactional
-    public int addProduct(
-            String name,
-            double price,
-            int categoryId,
-            String details) {
+    public int addProduct(String name, double price, int categoryId, String details) {
         int productId = -1;
 
         Product product;
