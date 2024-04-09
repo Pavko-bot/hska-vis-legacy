@@ -51,7 +51,7 @@ public class CategorymanagementController {
 
     @DeleteMapping(value = "/category/delete", params = { "id" })
     public void delCategoryById(
-            @RequestBody(required = true, name = "id") int id) {
+            @RequestBody(required = true) int id) {
         categorymanagementService.delCategoryById(id);
     }
 }
