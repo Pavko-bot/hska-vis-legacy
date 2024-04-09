@@ -1,6 +1,6 @@
 package com.hka.iwi.usermanagement;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 // TODO: check whether to comment out something
 

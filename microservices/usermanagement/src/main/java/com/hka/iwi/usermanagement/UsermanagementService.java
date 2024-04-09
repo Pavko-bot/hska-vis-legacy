@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.hka.iwi.usermanagement.User;
 import com.hka.iwi.usermanagement.Role;
 import com.hka.iwi.usermanagement.UserRepository;
+import com.hka.iwi.usermanagement.RoleRepository;
 import com.hka.iwi.usermanagement.UsermanagementController;
 
 import java.util.List;
@@ -16,6 +17,8 @@ public class UsermanagementService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Transactional
     public void registerUser(String username, String name, String lastname, String password, Role role) {
@@ -37,7 +40,7 @@ public class UsermanagementService {
     }
 
     public Role getRoleByLevel(int level) {
-        return userRepository.findByLevel(level);
+        return roleRepository.findByLevel(level);
     }
 
     public boolean doesUserAlreadyExist(String username) {
@@ -49,9 +52,9 @@ public class UsermanagementService {
     public boolean validate(User user) {
         return !user.getFirstname().isEmpty()
                 || !user.getPassword().isEmpty()
-                || !user.getRole() == null
-                || !user.getLastname() == null
-                || !user.getUsername() == null;
+                || user.getRole() != null
+                || user.getLastname() != null
+                || user.getUsername() != null;
     }
 
 }
