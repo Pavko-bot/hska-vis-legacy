@@ -3,6 +3,7 @@ package com.hka.iwi.productmanagement;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hka.iwi.productmanagement.Product;
 
@@ -20,8 +21,11 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
                         "AND (:searchMinPrice IS NULL OR p.price >= :searchMinPrice) " +
                         "AND (:searchMaxPrice IS NULL OR p.price <= :searchMaxPrice)")
         List<Product> getProductsForSearchValues(
-                        @Param("searchDescription") String searchDescription,
-                        @Param("searchMinPrice") Double searchMinPrice,
-                        @Param("searchMaxPrice") Double searchMaxPrice);
+                        @RequestParam("searchDescription") String searchDescription,
+                        @RequestParam("searchMinPrice") Double searchMinPrice,
+                        @RequestParam("searchMaxPrice") Double searchMaxPrice);
+
+        @Query("SELECT p FROM Product p WHERE name = :name LIMIT 1")
+        Product findByName(@RequestParam("name") String name);
 
 }
