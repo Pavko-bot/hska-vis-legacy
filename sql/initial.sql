@@ -1,3 +1,5 @@
+USE user_service;
+
 insert into `role` (`level1`, `type`) values(0, 'admin');
 insert into `role` (`level1`, `type`) values(1, 'user');
 
