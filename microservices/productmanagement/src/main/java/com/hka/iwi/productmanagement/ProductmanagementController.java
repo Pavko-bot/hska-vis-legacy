@@ -6,12 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.hka.iwi.productmanagement.ProductmanagementService;
 
 import java.util.List;
-
-// TODO: check whether implementation is correct
 
 @RestController
 public class ProductmanagementController {
@@ -24,9 +23,8 @@ public class ProductmanagementController {
         return productmanagementService.getProducts();
     }
 
-    @GetMapping(value = "/product", params = { "id" })
-    public Product getProductById(
-            @RequestParam(required = true, name = "id") int id) {
+    @GetMapping(value = "/product/{id}")
+    public Product getProductById(@PathVariable int id) {
         return productmanagementService.getProductById(id);
     }
 
@@ -36,7 +34,7 @@ public class ProductmanagementController {
         return productmanagementService.getProductByName(name);
     }
 
-    @PostMapping(value = "/product/add", params = { "name", "price", "categoryId", "details" })
+    @PostMapping(value = "/product", params = { "name", "price", "categoryId" })
     public int addProduct(
             @RequestParam(required = true, name = "name") String name,
             @RequestParam(required = true, name = "price") double price,
@@ -45,7 +43,7 @@ public class ProductmanagementController {
         return productmanagementService.addProduct(name, price, categoryId, details);
     }
 
-    @GetMapping(value = "/products/search", params = { "searchValue", "searchMinPrice", "searchMaxPrice" })
+    @GetMapping(value = "/products/search")
     public List<Product> getProductsForSearchValues(
             @RequestParam(required = false, name = "searchValue") String searchValue,
             @RequestParam(required = false, name = "searchMinPrice") Double searchMinPrice,
@@ -53,15 +51,14 @@ public class ProductmanagementController {
         return productmanagementService.getProductsForSearchValues(searchValue, searchMinPrice, searchMaxPrice);
     }
 
-    @DeleteMapping(value = "/products/delete", params = { "categoryId" })
+    @DeleteMapping(value = "/products", params = { "categoryId" })
     public boolean deleteProductsByCategoryId(
             @RequestParam(required = true, name = "categoryId") int categoryId) {
         return productmanagementService.deleteProductsByCategoryId(categoryId);
     }
 
-    @DeleteMapping(value = "/product/delete", params = { "id" })
-    public void deleteProductById(
-            @RequestParam(required = true, name = "id") int id) {
+    @DeleteMapping(value = "/product/{id}")
+    public void deleteProductById(@PathVariable int id) {
         productmanagementService.deleteProductById(id);
     }
 

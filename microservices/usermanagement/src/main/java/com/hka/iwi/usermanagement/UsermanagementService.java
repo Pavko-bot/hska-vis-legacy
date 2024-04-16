@@ -21,7 +21,8 @@ public class UsermanagementService {
     private RoleRepository roleRepository;
 
     @Transactional
-    public void registerUser(String username, String name, String lastname, String password, Role role) {
+    public void registerUser(String username, String name, String lastname, String password, int level) {
+        Role role = roleRepository.findByLevel(level);
         User user = new User(username, name, lastname, password, role);
         userRepository.save(user);
     }

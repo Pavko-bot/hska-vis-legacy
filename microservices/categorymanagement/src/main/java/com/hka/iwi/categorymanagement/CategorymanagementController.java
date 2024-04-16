@@ -7,12 +7,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.hka.iwi.categorymanagement.CategorymanagementService;
 
 import java.util.List;
-
-// TODO: check whether implementation is correct
 
 @RestController
 public class CategorymanagementController {
@@ -25,9 +24,8 @@ public class CategorymanagementController {
         return categorymanagementService.getCategories();
     }
 
-    @GetMapping(value = "/category", params = { "id" })
-    public Category getCategoryById(
-            @RequestParam(required = true, name = "id") int id) {
+    @GetMapping(value = "/category/{id}")
+    public Category getCategoryById(@PathVariable int id) {
         return categorymanagementService.getCategory(id);
     }
 
@@ -37,21 +35,18 @@ public class CategorymanagementController {
         return categorymanagementService.getCategoryByName(name);
     }
 
-    @PostMapping(value = "/category/add", params = { "name" })
-    public void addCategory(
-            @RequestParam(required = true, name = "name") String name) {
+    @PostMapping(value = "/category")
+    public void addCategory(@RequestParam(required = true, name = "name") String name) {
         categorymanagementService.addCategory(name);
     }
 
-    @DeleteMapping(value = "/category/delete")
-    public void delCategory(
-            @RequestBody(required = true) Category category) {
+    @DeleteMapping(value = "/category")
+    public void delCategory(@RequestBody(required = true) Category category) {
         categorymanagementService.delCategory(category);
     }
 
-    @DeleteMapping(value = "/category/delete", params = { "id" })
-    public void delCategoryById(
-            @RequestBody(required = true) int id) {
+    @DeleteMapping(value = "/category/{id}")
+    public void delCategoryById(@PathVariable int id) {
         categorymanagementService.delCategoryById(id);
     }
 }
