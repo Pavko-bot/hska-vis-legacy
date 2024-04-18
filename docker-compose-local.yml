@@ -1,34 +1,59 @@
-version: '3.2'
+version: "3.8"
 services:
-  legacywebshop:
+  webshop-dbms:
     build:
-      context: ./
-      dockerfile: ./docker/Dockerfile
-    ports:
-      - "8888:8080"
-    networks:
-      local_dev_net:
-          aliases:
-              - legacywebshop
-
-  web-shop-db-image:
-    build:
-      context: ./
-      dockerfile: ./docker/DockerfileMySQL
+      context: ./sql
+      dockerfile: Dockerfile
     volumes:
       - "./.data/db:/var/lib/mysql"
-    environment:
-      MYSQL_ROOT_PASSWORD: c8de110f37300a53a971749
-      MYSQL_DATABASE: webshop
-      MYSQL_USER: webshopuser
-      MYSQL_PASSWORD: 240b2c6d58ff2ce2f508b49f
+    container_name: webshop-dbms
+    restart: always
     ports:
       - "3306:3306"
     networks:
-        local_dev_net:
-            aliases:
-                - web-shop-db-image
+      webshop-network:
+        aliases:
+          - webshop-dbms
+
+  usermanagement:
+    build:
+      context: ./microservices/usermanagement
+      dockerfile: Dockerfile
+    depends_on:
+      - webshop-dbms
+    container_name: usermanagement
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - webshop-network
+
+  categorymanagement:
+    build:
+      context: ./microservices/categorymanagement
+      dockerfile: Dockerfile
+    depends_on:
+      - webshop-dbms
+    container_name: categorymanagement
+    restart: always
+    ports:
+      - "8081:8081"
+    networks:
+      - webshop-network
+
+  productmanagement:
+    build:
+      context: ./microservices/productmanagement
+      dockerfile: Dockerfile
+    depends_on:
+      - webshop-dbms
+    container_name: productmanagement
+    restart: always
+    ports:
+      - "8082:8082"
+    networks:
+      - webshop-network
 
 networks:
-  local_dev_net:
+  webshop-network:
     driver: bridge

@@ -2,14 +2,6 @@ CREATE DATABASE IF NOT EXISTS category_service;
 CREATE DATABASE IF NOT EXISTS product_service;
 CREATE DATABASE IF NOT EXISTS user_service;
 
-CREATE USER 'springuser'@'webshop-dbms' IDENTIFIED BY 'ThePassword';
-
-GRANT ALL PRIVILEGES ON category_service.* TO 'springuser'@'%';
-GRANT ALL PRIVILEGES ON product_service.* TO 'springuser'@'%';
-GRANT ALL PRIVILEGES ON user_service.* TO 'springuser'@'%';
-
-FLUSH PRIVILEGES;
-
 -- CREATE SCHEMA category_service;
 -- CREATE SCHEMA product_service;
 -- CREATE SCHEMA user_service;

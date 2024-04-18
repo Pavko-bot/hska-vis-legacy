@@ -5,10 +5,8 @@ FROM mysql:latest
 ENV MYSQL_DATABASE1=category_service \
     MYSQL_DATABASE2=product_service \
     MYSQL_DATABASE3=user_service \
-    MYSQL_USER=springuser \
-    MYSQL_PASSWORD=ThePassword \
-    MYSQL_ROOT_PASSWORD=root_password
+    MYSQL_ROOT_PASSWORD=root
 
 # Führe SQL-Skripte aus, um Datenbanken und Benutzer zu erstellen
-COPY ./sql/create-tables.sql /docker-entrypoint-initdb.d/create-tables.sql
-COPY ./sql/initial.sql /docker-entrypoint-initdb.d/initial.sql
+COPY create-tables.sql /docker-entrypoint-initdb.d/create-tables.sql
+COPY initial.sql /docker-entrypoint-initdb.d/initial.sql
