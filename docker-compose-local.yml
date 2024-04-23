@@ -1,13 +1,19 @@
-version: "3.8"
+version: "3"
 services:
   webshop-dbms:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE1: category_service
+      MYSQL_DATABASE2: product_service
+      MYSQL_DATABASE3: user_service
+      MYSQL_ROOT_PASSWORD: root
     build:
       context: ./sql
       dockerfile: Dockerfile
     volumes:
-      - "./.data/db:/var/lib/mysql"
+      - ./sql/create-tables.sql:/docker-entrypoint-initdb.d/create-tables.sql
+      - ./sql/initial.sql:/docker-entrypoint-initdb.d/initial.sql
     container_name: webshop-dbms
-    restart: always
     ports:
       - "3306:3306"
     networks:
@@ -22,7 +28,6 @@ services:
     depends_on:
       - webshop-dbms
     container_name: usermanagement
-    restart: always
     ports:
       - "8080:8080"
     networks:
@@ -35,7 +40,6 @@ services:
     depends_on:
       - webshop-dbms
     container_name: categorymanagement
-    restart: always
     ports:
       - "8081:8081"
     networks:
@@ -48,7 +52,6 @@ services:
     depends_on:
       - webshop-dbms
     container_name: productmanagement
-    restart: always
     ports:
       - "8082:8082"
     networks:
