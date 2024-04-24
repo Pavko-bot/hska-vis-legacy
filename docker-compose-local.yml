@@ -11,8 +11,7 @@ services:
       context: ./sql
       dockerfile: Dockerfile
     volumes:
-      - ./sql/create-tables.sql:/docker-entrypoint-initdb.d/create-tables.sql
-      - ./sql/initial.sql:/docker-entrypoint-initdb.d/initial.sql
+      - "./.data/db:/var/lib/mysql"
     container_name: webshop-dbms
     ports:
       - "3306:3306"
@@ -20,13 +19,19 @@ services:
       webshop-network:
         aliases:
           - webshop-dbms
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   usermanagement:
     build:
       context: ./microservices/usermanagement
       dockerfile: Dockerfile
     depends_on:
-      - webshop-dbms
+      webshop-dbms:
+        condition: service_healthy
     container_name: usermanagement
     ports:
       - "8080:8080"
@@ -38,7 +43,8 @@ services:
       context: ./microservices/categorymanagement
       dockerfile: Dockerfile
     depends_on:
-      - webshop-dbms
+      webshop-dbms:
+        condition: service_healthy
     container_name: categorymanagement
     ports:
       - "8081:8081"
@@ -50,7 +56,8 @@ services:
       context: ./microservices/productmanagement
       dockerfile: Dockerfile
     depends_on:
-      - webshop-dbms
+      webshop-dbms:
+        condition: service_healthy
     container_name: productmanagement
     ports:
       - "8082:8082"

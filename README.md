@@ -1,53 +1,37 @@
-[![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
-[![Travis Build Status](https://travis-ci.org/mavogel/hska-vis-legacy.svg?branch=master)](https://travis-ci.org/mavogel/hska-vis-legacy)
+# Webshop Microservices - Docker-Compose Anleitung
+Willkommen zur README-Datei für unseren Webshop mit Microservices. Diese Anleitung erklärt, wie du das Projekt mit Docker-Compose starten, stoppen und die zugehörigen Services aufrufen kannst.
 
-# Distributed Information Systems Laboratory aka vis-lab
-This project is the quick setup of the legacy webshop of 
-the masters course 'Distributed Information Systems' at the University of Applied Sciences (Karlsruhe).
+## Voraussetzungen
+- Installiertes Docker
+- Installiertes Docker-Compose
 
-## Table of Contents
-- [Prerequisites](#prerequisites)
-- [Usage](#usage)
-    - [Quick Start](#quick-start)
-    - [Built it on your own](#built-it-on-your-own)
-- [Database cleanup](#database-cleanup)
-- [License](#license)
+## Starten des Docker-Compose
+Um die Microservices zu starten, nutze folgenden Befehl im Terminal, während du im Root-Ordner des Projekts bist:
 
-## <a name="prerequisites"></a>Prerequisites
-- [docker](https://docker.com)
-- with `docker-compose`
+~~~
+docker-compose -f docker-compose-local.yml up
+~~~
 
-## <a name="usage"></a>Usage
-You can run the images from `docker hub` which is preferred or built it on your own.
-First: Start Docker daemon and check with `docker ps`
+Dies startet alle Microservices, die in der docker-compose-local.yml definiert sind.
 
-### <a name="quick-start"></a>Quick Start (docker-hub)
-- Copy the `docker-compose.yml` locally in a desired folder and run
-```bash
-$ docker-compose up -d
-# to follow the logs
-$ docker-compose logs -tf
-# to shutdown
-$ docker-compose down
-```
+## Herunterfahren des Docker-Compose
+Um die Microservices herunterzufahren, ohne die Volumes zu löschen, kannst du folgenden Befehl verwenden:
 
-### <a name="built-it-on-your-own"></a>Built it on your own
-- Run `docker-compose -f docker-compose-local.yml up -d` which will
-    - It builds the web app `war` in a staged build, packs it into a docker tomcat8 container,
-    and sets the user `tomcat` with password `admin` for the Management Console at http://localhost:8888/
-    - Initializes the MySQL Database docker container with the db user defined in `hibernate.cfg.xml`
-    - Sets up both containers and make the legacy webshop available under http://localhost:8888/EShop-1.0.0
-- Follow the logs via `docker-compose -f docker-compose-local.yml logs -tf`
-- To shutdown the containers run `docker-compose -f docker-compose-local.yml down`
+~~~
+docker-compose -f docker-compose-local.yml down
+~~~
 
-## <a name="database-cleanup"></a>Database Cleanup
-If you change the user and password of the MySQL database, you should run
-```bash
-$ docker-compose rm -v
-$ rm -rf .data
-```
-Details can be found [here](https://github.com/docker-library/mysql/issues/51)
+Dies stoppt die Microservices, ohne Daten oder Konfiguration zu löschen.
 
-## <a name="license"></a>License
-Copyright (c) 2017-2018 Manuel Vogel
-Source code is open source and released under the MIT license.
+Wenn du alle Volumes löschen willst, nutze:
+
+~~~
+docker-compose -f docker-compose-local.yml down --volumes
+~~~
+
+## Erreichbarkeit der Microservices
+Nach dem Starten des Docker-Compose sind die Microservices unter folgenden URLs erreichbar:
+
+- Usermanagement: http://localhost:8080
+- Categorymanagement: http://localhost:8081
+- Productmanagement: http://localhost:8082
