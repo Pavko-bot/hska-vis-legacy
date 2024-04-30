@@ -2,8 +2,6 @@ package com.hka.iwi.productmanagement;
 
 import jakarta.persistence.*;
 
-// TODO: double check whether we only need the categoryId for the category
-
 /**
  * This class contains details about products.
  */

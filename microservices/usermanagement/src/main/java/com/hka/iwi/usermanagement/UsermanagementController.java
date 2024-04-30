@@ -13,8 +13,6 @@ import com.hka.iwi.usermanagement.UsermanagementService;
 
 import java.util.List;
 
-// TODO: check whether implementation is correct
-
 @RestController
 public class UsermanagementController {
 

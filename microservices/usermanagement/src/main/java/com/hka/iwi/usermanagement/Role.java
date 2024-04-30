@@ -2,8 +2,6 @@ package com.hka.iwi.usermanagement;
 
 import jakarta.persistence.*;
 
-// TODO: check whether to comment out something
-
 /**
  * This class contains details about roles.
  */

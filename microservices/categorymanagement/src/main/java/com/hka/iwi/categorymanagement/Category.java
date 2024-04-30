@@ -2,8 +2,6 @@ package com.hka.iwi.categorymanagement;
 
 import jakarta.persistence.*;
 
-// TTODO: double check whether we can simply remove product information
-
 /**
  * This class contains details about categories.
  */

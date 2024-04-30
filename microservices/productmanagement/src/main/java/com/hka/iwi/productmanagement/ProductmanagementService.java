@@ -26,7 +26,6 @@ public class ProductmanagementService {
     }
 
     public Product getProductById(int id) {
-        // TODO: Handle 'Optional'
         return productRepository.findById(id).get();
     }
 
@@ -58,7 +57,6 @@ public class ProductmanagementService {
 
     @Transactional
     public boolean deleteProductsByCategoryId(int categoryId) {
-        // TODO?
         return false;
     }
 

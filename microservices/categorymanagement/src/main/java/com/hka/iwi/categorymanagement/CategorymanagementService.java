@@ -24,7 +24,6 @@ public class CategorymanagementService {
     }
 
     public Category getCategory(int id) {
-        // TODO: Handle 'Optional'
         return categoryRepository.findById(id).get();
     }
 
