@@ -34,7 +34,7 @@ spec:
       containers:
         - image: docker.io/paro1019/mysqldbms:latest
           name: mysql
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             # Use secret in real usage
             - name: MYSQL_ROOT_PASSWORD
@@ -81,7 +81,7 @@ spec:
       containers:
         - image: docker.io/paro1019/apache:latest
           name: apache
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
           resources: {}
@@ -129,7 +129,7 @@ spec:
         - image: docker.io/paro1019/category:latest
           name: category
           resources: {}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
@@ -194,7 +194,7 @@ spec:
         - image: docker.io/paro1019/product:latest
           name: product
           resources: {}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
@@ -258,7 +258,7 @@ spec:
         - image: docker.io/paro1019/user:latest
           name: user
           resources: {}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
