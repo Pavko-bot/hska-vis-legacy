@@ -1,3 +1,64 @@
+# SECRETS
+apiVersion: v1
+stringData:
+  MYSQL_ROOT_PASSWORD: c8de110f37300a53a971749
+  MYSQL_USER: webshopuser
+  MYSQL_PASSWORD: 240b2c6d58ff2ce2f508b49f
+kind: Secret
+type: Opaque
+metadata:
+  name: mysql-pass
+---
+# CONFIG MAP
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap
+data:
+  MYSQL_USER: webshopuser
+---
+# STATEFUL APPLICATION
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - image: docker.io/paro1019/mysqldbms:latest
+          name: mysql
+          imagePullPolicy: IfNotPresent
+          env:
+            # Use secret in real usage
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-pass
+                  key:
+                    MYSQL_ROOT_PASSWORD
+                    # Use secret in real usage
+            - name: MYSQL_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-pass
+                  key: MYSQL_PASSWORD
+          ports:
+            - containerPort: 3306
+              name: mysql
+---
+# APACHE
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -43,8 +104,8 @@ spec:
   type: LoadBalancer
 status:
   loadBalancer: {}
-
 ---
+# CATEGORY
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -69,6 +130,26 @@ spec:
           name: category
           resources: {}
           imagePullPolicy: IfNotPresent
+          env:
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap
+                  key: MYSQL_USER
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-pass
+                  key: MYSQL_PASSWORD
+            - name: SPRING_DATASOURCE_URL
+              # java.net.UnknownHostException: $(MYSQL_SERVICE_HOST)
+              value: jdbc:mysql://mysql.default.svc.cluster.local:3306/category_service
+            - name: PRODUCT_RIBBON_LISTOFSERVERS
+              value: "$(PRODUCT_SERVICE_HOST):$(PRODUCT_SERVICE_PORT)/"
+      initContainers:
+        - name: init-delay-category
+          image: busybox
+          command: ["sleep", "15"]
 status: {}
 ---
 apiVersion: v1
@@ -88,8 +169,8 @@ spec:
   type: LoadBalancer
 status:
   loadBalancer: {}
-
 ---
+# PRODUCT
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -114,6 +195,25 @@ spec:
           name: product
           resources: {}
           imagePullPolicy: IfNotPresent
+          env:
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap
+                  key: MYSQL_USER
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-pass
+                  key: MYSQL_PASSWORD
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://$(MYSQL_SERVICE_HOST):3306/product_service
+            - name: CATEGORY_RIBBON_LISTOFSERVERS
+              value: $(CATEGORY_SERVICE_HOST):$(CATEGORY_SERVICE_PORT)/
+      initContainers:
+        - name: init-delay-product
+          image: busybox
+          command: ["sleep", "15"]
 status: {}
 ---
 apiVersion: v1
@@ -133,8 +233,8 @@ spec:
   type: LoadBalancer
 status:
   loadBalancer: {}
-
 ---
+# USER
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -159,6 +259,27 @@ spec:
           name: user
           resources: {}
           imagePullPolicy: IfNotPresent
+          env:
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap
+                  key: MYSQL_USER
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-pass
+                  key: MYSQL_PASSWORD
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://$(MYSQL_SERVICE_HOST):3306/user_service
+            - name: PRODUCT_RIBBON_LISTOFSERVERS
+              value: "$(PRODUCT_SERVICE_HOST):$(PRODUCT_SERVICE_PORT)/"
+            - name: CATEGORY_RIBBON_LISTOFSERVERS
+              value: $(CATEGORY_SERVICE_HOST):$(CATEGORY_SERVICE_PORT)/
+      initContainers:
+        - name: init-delay-product
+          image: busybox
+          command: ["sleep", "15"]
 status: {}
 ---
 apiVersion: v1

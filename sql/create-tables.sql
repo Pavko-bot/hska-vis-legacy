@@ -2,9 +2,8 @@ CREATE DATABASE IF NOT EXISTS category_service;
 CREATE DATABASE IF NOT EXISTS product_service;
 CREATE DATABASE IF NOT EXISTS user_service;
 
--- CREATE SCHEMA category_service;
--- CREATE SCHEMA product_service;
--- CREATE SCHEMA user_service;
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON *.* TO 'webshopuser'@'%' WITH GRANT OPTION;
 
 USE category_service; 
 
