@@ -58,6 +58,17 @@ spec:
             - containerPort: 3306
               name: mysql
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: mysql
+  type: LoadBalancer
+---
 # APACHE
 apiVersion: apps/v1
 kind: Deployment
@@ -142,8 +153,7 @@ spec:
                   name: mysql-pass
                   key: MYSQL_PASSWORD
             - name: SPRING_DATASOURCE_URL
-              # java.net.UnknownHostException: $(MYSQL_SERVICE_HOST)
-              value: jdbc:mysql://mysql.default.svc.cluster.local:3306/category_service
+              value: jdbc:mysql://$(MYSQL_SERVICE_HOST):3306/product_service
             - name: PRODUCT_RIBBON_LISTOFSERVERS
               value: "$(PRODUCT_SERVICE_HOST):$(PRODUCT_SERVICE_PORT)/"
       initContainers:
