@@ -107,7 +107,7 @@ metadata:
   name: apache
 spec:
   ports:
-    - port: 8001
+    - port: 80
       protocol: TCP
       targetPort: 80
   selector:
@@ -139,6 +139,8 @@ spec:
       containers:
         - image: docker.io/paro1019/category:latest
           name: category
+          ports:
+            - containerPort: 8080
           resources: {}
           imagePullPolicy: Always
           env:
@@ -153,9 +155,9 @@ spec:
                   name: mysql-pass
                   key: MYSQL_PASSWORD
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://$(MYSQL_SERVICE_HOST):3306/product_service
+              value: jdbc:mysql://mysql:3306/product_service
             - name: PRODUCT_RIBBON_LISTOFSERVERS
-              value: "$(PRODUCT_SERVICE_HOST):$(PRODUCT_SERVICE_PORT)/"
+              value: product:8080/
       initContainers:
         - name: init-delay-category
           image: busybox
@@ -203,6 +205,8 @@ spec:
       containers:
         - image: docker.io/paro1019/product:latest
           name: product
+          ports:
+            - containerPort: 8080
           resources: {}
           imagePullPolicy: Always
           env:
@@ -217,9 +221,9 @@ spec:
                   name: mysql-pass
                   key: MYSQL_PASSWORD
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://$(MYSQL_SERVICE_HOST):3306/product_service
+              value: jdbc:mysql://mysql:3306/product_service
             - name: CATEGORY_RIBBON_LISTOFSERVERS
-              value: $(CATEGORY_SERVICE_HOST):$(CATEGORY_SERVICE_PORT)/
+              value: category:8080/
       initContainers:
         - name: init-delay-product
           image: busybox
@@ -267,6 +271,8 @@ spec:
       containers:
         - image: docker.io/paro1019/user:latest
           name: user
+          ports:
+            - containerPort: 8080
           resources: {}
           imagePullPolicy: Always
           env:
@@ -281,11 +287,11 @@ spec:
                   name: mysql-pass
                   key: MYSQL_PASSWORD
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://$(MYSQL_SERVICE_HOST):3306/user_service
+              value: jdbc:mysql://mysql:3306/user_service
             - name: PRODUCT_RIBBON_LISTOFSERVERS
-              value: "$(PRODUCT_SERVICE_HOST):$(PRODUCT_SERVICE_PORT)/"
+              value: product:8080/
             - name: CATEGORY_RIBBON_LISTOFSERVERS
-              value: $(CATEGORY_SERVICE_HOST):$(CATEGORY_SERVICE_PORT)/
+              value: category:8080/
       initContainers:
         - name: init-delay-product
           image: busybox
