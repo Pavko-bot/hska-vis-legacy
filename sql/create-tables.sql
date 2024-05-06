@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS category_service;
 CREATE DATABASE IF NOT EXISTS product_service;
 CREATE DATABASE IF NOT EXISTS user_service;
 
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+CREATE USER 'webshopuser'@'%' IDENTIFIED BY '240b2c6d58ff2ce2f508b49f';
 GRANT ALL PRIVILEGES ON *.* TO 'webshopuser'@'%' WITH GRANT OPTION;
 
 USE category_service; 

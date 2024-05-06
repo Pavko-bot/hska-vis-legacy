@@ -11,7 +11,8 @@ services:
       context: ./sql
       dockerfile: Dockerfile
     volumes:
-      - "./.data/db:/var/lib/mysql"
+      - "./.data/db:/var/lib/mysql_data"
+      - "./conf/mysql:/etc/mysql/conf.d"
     container_name: webshop-dbms
     ports:
       - "3306:3306"
