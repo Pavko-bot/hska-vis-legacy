@@ -17,6 +17,9 @@ public class CategorymanagementService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private CategoryServiceRequests requests;
+
     public List<Category> getCategories() {
         List<Category> categories = new ArrayList<Category>();
         categoryRepository.findAll().forEach(categories::add);
@@ -40,11 +43,13 @@ public class CategorymanagementService {
     @Transactional
     public void delCategory(Category cat) {
         categoryRepository.deleteById(cat.getId());
+        requests.deleteProductsByCategoryId(cat.getId());
     }
 
     @Transactional
     public void delCategoryById(int id) {
         categoryRepository.deleteById(id);
+        requests.deleteProductsByCategoryId(id);
     }
 
 }

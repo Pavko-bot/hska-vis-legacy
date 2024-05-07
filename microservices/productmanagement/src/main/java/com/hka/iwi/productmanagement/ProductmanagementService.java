@@ -16,6 +16,9 @@ public class ProductmanagementService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private ProductServiceRequests requests;
+
     public List<Product> getProducts() {
         return productRepository.findAll();
     }
@@ -36,6 +39,10 @@ public class ProductmanagementService {
     @Transactional
     public int addProduct(String name, double price, int categoryId, String details) {
         int productId = -1;
+
+        if (!requests.CategoryExists(categoryId)) {
+            throw new IllegalArgumentException("Category does not exist");
+        }
 
         Product product;
         if (details == null) {

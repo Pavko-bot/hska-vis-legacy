@@ -1,6 +1,8 @@
 package com.hka.iwi.categorymanagement;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,33 +22,63 @@ public class CategorymanagementController {
     private CategorymanagementService categorymanagementService;
 
     @GetMapping(value = "/categories")
-    public List<Category> getCategories() {
-        return categorymanagementService.getCategories();
+    public ResponseEntity getCategories() {
+        try {
+            List<Category> categories = categorymanagementService.getCategories();
+            return ResponseEntity.ok(categories);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
     }
 
     @GetMapping(value = "/category/{id}")
-    public Category getCategoryById(@PathVariable int id) {
-        return categorymanagementService.getCategory(id);
+    public ResponseEntity getCategoryById(@PathVariable int id) {
+        try {
+            Category category = categorymanagementService.getCategory(id);
+            return ResponseEntity.ok(category);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
     }
 
     @GetMapping(value = "/category", params = { "name" })
-    public Category getCategoryByName(
+    public ResponseEntity getCategoryByName(
             @RequestParam(required = true, name = "name") String name) {
-        return categorymanagementService.getCategoryByName(name);
+        try {
+            Category category = categorymanagementService.getCategoryByName(name);
+            return ResponseEntity.ok(category);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
     }
 
     @PostMapping(value = "/category")
-    public void addCategory(@RequestParam(required = true, name = "name") String name) {
-        categorymanagementService.addCategory(name);
+    public ResponseEntity addCategory(@RequestParam(required = true, name = "name") String name) {
+        try {
+            categorymanagementService.addCategory(name);
+            return ResponseEntity.ok("Category added successfully");
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
     }
 
     @DeleteMapping(value = "/category")
-    public void delCategory(@RequestBody(required = true) Category category) {
-        categorymanagementService.delCategory(category);
+    public ResponseEntity delCategory(@RequestBody(required = true) Category category) {
+        try {
+            categorymanagementService.delCategory(category);
+            return ResponseEntity.ok("Category deleted successfully");
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
     }
 
     @DeleteMapping(value = "/category/{id}")
-    public void delCategoryById(@PathVariable int id) {
-        categorymanagementService.delCategoryById(id);
+    public ResponseEntity delCategoryById(@PathVariable int id) {
+        try {
+            categorymanagementService.delCategoryById(id);
+            return ResponseEntity.ok("Category deleted successfully");
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
     }
 }
