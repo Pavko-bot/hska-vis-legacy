@@ -77,7 +77,20 @@ Starte zuerst Minikube mit dem Befehl (gegebenfalls muss noch die Flag `--driver
 minikube start
 ```
 
-Um das Cluster zu starten, nutze folgenden Befehl in einem Terminal, während du im Root-Ordner des Projekts bist:
+Um das `PersistenctVolume` und den `PersistentVolumeClaim` zu deployen, nutze folgenden Befehl in einem Terminal, während du im Root-Ordner des Projekts bist:
+
+```
+kubectl apply -f .\sql\mysql-pv.yaml
+```
+
+Prüfe, dass das Deployment erfolgreich war, indem du folgende Befehle ausführst:
+
+```
+kubectl get pv
+kubectl get pvc
+```
+
+Um die Services zu deployen, nutze folgenden Befehl in einem Terminal, während du im Root-Ordner des Projekts bist:
 
 ```
 kubectl apply -f microservices.yaml
@@ -124,7 +137,7 @@ Von dort aus solltest du wie gewohnt die Microservices aufrufen können, z.B.:
 
 - [localhost:8001/users/exists?username=admin](http://localhost:8001/users/exists?username=admin)
 - [localhost:8001/categories](http://localhost:8001/categories)
-- [localhost:8001/product/3](htpp://localhost:8001/product/3)
+- [localhost:8001/product/3](http://localhost:8001/product/3)
 
 ## Das Cluster updaten
 
