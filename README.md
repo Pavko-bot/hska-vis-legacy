@@ -152,3 +152,75 @@ kubectl apply -f microservices.yaml
 ```
 
 Da die `imagePullPolicy: Always` ist, werden dabei immer die Images gepullt, unabhängig davon, ob noch welche gecached sind.
+
+# Istio Konfiguration
+
+## Istio einrichten
+
+Folge den Anleitungen auf [dieser Seite](https://istio.io/latest/docs/setup/getting-started/#download), um Istio herunterzuladen und installiere das Demo-Profil:
+
+```
+istioctl install --set profile=demo -y
+```
+
+Um die erforderlichen Dashboards und Visualisierungen erstellen und anschauen zu können, müssen folgende Installationen/Deployments vorgenommen werden:
+
+```
+kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.21/samples/addons/grafana.yaml
+kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.21/samples/addons/prometheus.yaml
+kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.21/samples/addons/kiali.yaml
+```
+
+Weise dem default namespace anschließend folgende Konfiguration zu und überprüfe die zugewiesenen Labels:
+
+```
+kubectl label namespace default istio-injection=enabled
+kubectl describe namespace default
+```
+
+Deploye alles neu, indem du folgende Befehle ausführst:
+
+```
+kubectl delete -f microservices.yaml
+kubectl apply -f microservices.yaml
+```
+
+Um nun zu prüfen, dass der Istio Sidecar Injector korrekt läuft, führe folgenden Befehl aus:
+
+```
+kubectl get pods -n istio-system
+```
+
+Dort sollten dann sowohl die istio-Pods, als auch die Pods für Grafana, Prometheus und Kiali aufgelistet werden.
+
+### Prometheus & Grafana Dashboard
+
+Um das Prometheus & Grafana Dashboard zu öffnen, führe folgenden Befehl aus:
+
+```
+istioctl dashboard grafana
+```
+
+Oder wenn du istioctl als Executable heruntergeladen hast:
+
+```
+./istioctl.exe dashboard grafana
+```
+
+Navigiere dort zu den Dashboards und wähle `Istio Service Dashboard`. Setze ein paar Requests an die Microservices ab. Du kannst den Microservice unter dem `Service`-Reiter auswählen und die Workloads der Microservices dann dort betrachten und analysieren.
+
+### Kiali Dashboard
+
+Um das Kiali Dashboard zu öffnen, führe folgenden Befehl aus:
+
+```
+istioctl dashboard kiali
+```
+
+Oder wenn du istioctl als Executable heruntergeladen hast:
+
+```
+./istioctl.exe dashboard kiali
+```
+
+Navigiere dort zu dem Reiter `Graph`. Dort kannst du, nachdem du Requests an die Microservices abgesetzt hast und diese registriert wurden, die Topologie des Netzes, beziehungsweise das Service Mesh sehen und analysieren.
