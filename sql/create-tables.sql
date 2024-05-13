@@ -9,7 +9,7 @@ USE category_service;
 
 CREATE TABLE category (
 	id INT NOT NULL AUTO_INCREMENT,
-	name VARCHAR(255) NOT NULL,
+	name VARCHAR(255) NOT NULL UNIQUE,
 	PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 
