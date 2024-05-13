@@ -77,7 +77,7 @@ Starte zuerst Minikube mit dem Befehl (gegebenfalls muss noch die Flag `--driver
 minikube start
 ```
 
-Um das `PersistenctVolume` und den `PersistentVolumeClaim` zu deployen, nutze folgenden Befehl in einem Terminal, während du im Root-Ordner des Projekts bist:
+Um das `PersistentVolume` und den `PersistentVolumeClaim` zu deployen, nutze folgenden Befehl in einem Terminal, während du im Root-Ordner des Projekts bist:
 
 ```
 kubectl apply -f .\sql\mysql-pv.yaml
