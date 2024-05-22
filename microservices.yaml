@@ -322,3 +322,73 @@ spec:
   type: LoadBalancer
 status:
   loadBalancer: {}
+---
+# WEBSHOP
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    run: webshop-frontend
+  name: webshop-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: webshop-frontend
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: webshop-frontend
+    spec:
+      containers:
+        - image: docker.io/paro1019/webshop-frontend:latest
+          name: webshop-frontend
+          ports:
+            - containerPort: 8080
+          resources: {}
+          imagePullPolicy: Always
+          env:
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap
+                  key: MYSQL_USER
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-pass
+                  key: MYSQL_PASSWORD
+            - name: PRODUCT_RIBBON_LISTOFSERVERS
+              value: product:8080/
+            - name: CATEGORY_RIBBON_LISTOFSERVERS
+              value: category:8080/
+            - name: USER_RIBBON_LISTOFSERVERS
+              value: user:8080/
+      initContainers:
+        - name: init-delay-category
+          image: busybox
+          command: ["sleep", "15"]
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    run: webshop-frontend
+  name: webshop-frontend
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    run: webshop-frontend
+  type: LoadBalancer
+status:
+  loadBalancer: {}
+---
+
