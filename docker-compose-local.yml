@@ -1,7 +1,7 @@
 version: "3"
 services:
   webshop-dbms:
-    image: mysql:latest
+    #image: mysql:latest
     environment:
       MYSQL_DATABASE1: category_service
       MYSQL_DATABASE2: product_service
