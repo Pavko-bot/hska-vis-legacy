@@ -37,9 +37,7 @@ public class CategoryManagerImpl implements CategoryManager {
 	}
 
 	public void addCategory(String name) {
-		Map<String, Object> requestBody = new HashMap<String, Object>();
-		requestBody.put("name", name);
-		categoryClient.addCategory(requestBody);
+		categoryClient.addCategory(name);
 	}
 
 	public void delCategory(Category cat) {

@@ -31,5 +31,5 @@ public interface ProductClient {
         boolean deleteProductsByCategoryId(@Param("categoryId") int categoryId);
 
         @RequestLine("DELETE /product/{id}")
-        boolean deleteProductById(@Param("id") int id);
+        void deleteProductById(@Param("id") int id);
 }

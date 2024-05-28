@@ -19,9 +19,9 @@ public interface CategoryClient {
     @RequestLine("GET /category?name={name}")
     Category getCategoryByName(@Param("name") String name);
 
-    @RequestLine("POST /category")
+    @RequestLine("POST /category?name={name}")
     @Headers("Content-Type: application/json")
-    void addCategory(Map<String, Object> requestBody);
+    void addCategory(@Param("name") String name);
 
     @RequestLine("DELETE /category")
     @Headers("Content-Type: application/json")

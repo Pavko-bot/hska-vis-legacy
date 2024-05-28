@@ -1,6 +1,5 @@
 package hska.iwi.eShopMaster.model.database.dataobjects;
 
-
 import javax.persistence.*;
 
 /**
@@ -26,7 +25,9 @@ public class Product implements java.io.Serializable {
 	@Column(name = "price")
 	private double price;
 
-	
+	@Column(name = "category_id")
+	private int categoryId;
+
 	@ManyToOne
 	@JoinColumn(name = "category_id")
 	private Category category;
@@ -72,6 +73,14 @@ public class Product implements java.io.Serializable {
 
 	public void setPrice(double price) {
 		this.price = price;
+	}
+
+	public int getCategoryId() {
+		return this.categoryId;
+	}
+
+	public void setCategory(int categoryId) {
+		this.categoryId = categoryId;
 	}
 
 	public Category getCategory() {
