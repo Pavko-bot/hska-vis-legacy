@@ -1,8 +1,11 @@
 package hska.iwi.eShopMaster.controller;
 
 import hska.iwi.eShopMaster.model.businessLogic.manager.ProductManager;
+import hska.iwi.eShopMaster.model.businessLogic.manager.CategoryManager;
 import hska.iwi.eShopMaster.model.businessLogic.manager.impl.ProductManagerImpl;
+import hska.iwi.eShopMaster.model.businessLogic.manager.impl.CategoryManagerImpl;
 import hska.iwi.eShopMaster.model.database.dataobjects.Product;
+import hska.iwi.eShopMaster.model.database.dataobjects.Category;
 import hska.iwi.eShopMaster.model.database.dataobjects.User;
 
 import java.util.Map;
@@ -11,7 +14,7 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class ProductDetailsAction extends ActionSupport {
-	
+
 	private User user;
 	private int id;
 	private String searchValue;
@@ -27,20 +30,27 @@ public class ProductDetailsAction extends ActionSupport {
 	public String execute() throws Exception {
 
 		String res = "input";
-		
+
 		Map<String, Object> session = ActionContext.getContext().getSession();
 		user = (User) session.get("webshop_user");
-		
-		if(user != null) {
+
+		if (user != null) {
 			ProductManager productManager = new ProductManagerImpl();
+			CategoryManager categoryManager = new CategoryManagerImpl();
+
 			product = productManager.getProductById(id);
-			
-			res = "success";			
+			Category category = categoryManager.getCategory(product.getCategoryId());
+			Product mappedProduct = new Product(product.getName(), product.getPrice(), category,
+					product.getDetails());
+			mappedProduct.setId(product.getId());
+
+			this.product = mappedProduct;
+			res = "success";
 		}
-		
-		return res;		
+
+		return res;
 	}
-	
+
 	public User getUser() {
 		return user;
 	}
