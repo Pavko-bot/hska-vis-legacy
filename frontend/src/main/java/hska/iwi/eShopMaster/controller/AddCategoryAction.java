@@ -17,36 +17,49 @@ public class AddCategoryAction extends ActionSupport {
 	 * 
 	 */
 	private static final long serialVersionUID = -6704600867133294378L;
-	
+
 	private String newCatName = null;
-	
+
 	private List<Category> categories;
-	
+
 	User user;
 
-	public String execute() throws Exception {
+	public String execute() {
+		try {
+			String res = "input";
 
-		String res = "input";
+			Map<String, Object> session = ActionContext.getContext().getSession();
+			user = (User) session.get("webshop_user");
+			if (user != null && (user.getRole().getTyp().equals("admin"))) {
+				CategoryManager categoryManager = new CategoryManagerImpl();
 
-		Map<String, Object> session = ActionContext.getContext().getSession();
-		user = (User) session.get("webshop_user");
-		if(user != null && (user.getRole().getTyp().equals("admin"))) {
-			CategoryManager categoryManager = new CategoryManagerImpl();
-			// Add category
-			categoryManager.addCategory(newCatName);
-			
-			// Go and get new Category list
-			this.setCategories(categoryManager.getCategories());
-			
-			res = "success";
+				List<Category> existingCategories = categoryManager.getCategories();
+				for (Category category : existingCategories) {
+					if (category.getName().equalsIgnoreCase(newCatName)) {
+						addActionError("Kategorie existiert bereits.");
+						return ERROR;
+					}
+				}
+
+				// Add category
+				categoryManager.addCategory(newCatName);
+
+				// Go and get new Category list
+				this.setCategories(categoryManager.getCategories());
+
+				res = "success";
+			}
+
+			return res;
+		} catch (Exception e) {
+			addActionError("An unexpected error occurred.");
+			return ERROR;
 		}
-		
-		return res;
-	
+
 	}
-	
+
 	@Override
-	public void validate(){
+	public void validate() {
 		if (getNewCatName().length() == 0) {
 			addActionError(getText("error.catname.required"));
 		}
@@ -62,7 +75,7 @@ public class AddCategoryAction extends ActionSupport {
 	public void setCategories(List<Category> categories) {
 		this.categories = categories;
 	}
-	
+
 	public String getNewCatName() {
 		return newCatName;
 	}
